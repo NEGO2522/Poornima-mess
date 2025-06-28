@@ -1,27 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { 
-  FiChevronLeft, 
-  FiChevronRight, 
-  FiInfo, 
-  FiClock, 
-  FiCoffee, 
-  FiSun, 
-  FiMoon, 
-  FiMapPin, 
-  FiLinkedin, 
-  FiMail, 
-  FiUser, 
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiClock,
+  FiCoffee,
+  FiSun,
+  FiMoon,
+  FiLinkedin,
+  FiMail,
   FiDollarSign,
   FiAlertCircle,
-  FiCheckCircle
+  FiCheckCircle,
+  FiChevronDown,
+  FiChevronUp,
+  FiMenu
 } from 'react-icons/fi';
-import { weeklyMenu, messRules, contactInfo, feeStructure } from '../data/messData'; 
+import { weeklyMenu, messRules } from '../data/messData';
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const mealTypes = ['breakfast', 'lunch', 'snacks', 'dinner'];
 
-// Function to get the current day of the week
 const getCurrentDay = () => {
   const date = new Date();
   return days[date.getDay()];
@@ -29,37 +28,23 @@ const getCurrentDay = () => {
 
 const Home = () => {
   const [activeDay, setActiveDay] = useState(getCurrentDay());
-  const [currentDate, setCurrentDate] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showMobileSections, setShowMobileSections] = useState({
+    timings: false,
+    rules: false,
+    guest: false,
+  });
   const daySelectorRef = useRef(null);
-  const isInView = useInView(daySelectorRef, { once: true });
-  
-  // Format and set the current date
-  useEffect(() => {
-    const date = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    setCurrentDate(date.toLocaleDateString('en-US', options));
-    
-    // Update the active day at midnight
-    const now = new Date();
-    const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) - now;
-    
-    const timeoutId = setTimeout(() => {
-      setActiveDay(getCurrentDay());
-    }, msUntilMidnight);
-    
-    return () => clearTimeout(timeoutId);
-  }, []);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   const scrollDays = (direction) => {
     if (daySelectorRef.current) {
       daySelectorRef.current.scrollBy({
@@ -67,10 +52,10 @@ const Home = () => {
         behavior: 'smooth'
       });
     }
-  }; 
-  
+  };
+
   const getMealIcon = (mealType) => {
-    switch(mealType) {
+    switch (mealType) {
       case 'breakfast':
         return <FiSun className="inline-block mr-2" />;
       case 'lunch':
@@ -83,27 +68,43 @@ const Home = () => {
         return null;
     }
   };
-  
+
+  // Mobile toggle handler
+  const handleToggle = (section) => {
+    setShowMobileSections((prev) => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   return (
-    <motion.div 
+    <motion.div
       className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 text-gray-800"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       {/* Sticky Header */}
-      <motion.header 
+      <motion.header
         className={`sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-white/90 backdrop-blur-md shadow-md' 
+          isScrolled
+            ? 'bg-white/90 backdrop-blur-md shadow-md'
             : 'bg-gradient-to-r from-blue-600 to-blue-700'
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 100 }}
       >
-        <div className="container mx-auto px-4 py-4 md:py-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="container mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
+          {/* Hamburger menu for mobile */}
+          <button
+            className="sm:hidden flex items-center justify-center h-10 w-10 rounded-full bg-blue-700 hover:bg-blue-800 transition-colors mr-4"
+            onClick={() => setShowMobileMenu((prev) => !prev)}
+            aria-label="Open menu"
+          >
+            <FiMenu className="text-white text-2xl" />
+          </button>
+          <div className="flex-1 flex flex-col md:flex-row md:items-center md:justify-between">
             <motion.div
               initial={{ scale: 0.9, opacity: 0, x: -20 }}
               animate={{ scale: 1, opacity: 1, x: 0 }}
@@ -114,7 +115,7 @@ const Home = () => {
               }`}>
                 Poornima Mess Menu
               </h1>
-              <motion.p 
+              <motion.p
                 className={`text-sm md:text-base ${
                   isScrolled ? 'text-gray-600' : 'text-blue-100'
                 }`}
@@ -125,30 +126,141 @@ const Home = () => {
                 {activeDay}'s Special
               </motion.p>
             </motion.div>
-            
-            <motion.div 
+            <motion.div
               className="hidden md:block bg-white/20 rounded-full px-4 py-2 mt-2 md:mt-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
               <p className="text-sm text-white font-medium">
-                {new Date().toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
+                {new Date().toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
                 })}
               </p>
             </motion.div>
           </div>
         </div>
+        {/* Mobile Dropdown Menu */}
+        <AnimatePresence>
+          {showMobileMenu && (
+            <motion.div
+              className="sm:hidden bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Collapsible Sections inside dropdown */}
+              <div className="space-y-2">
+                {/* Meal Timings */}
+                <div className="bg-white/10 rounded-lg">
+                  <button
+                    className="w-full flex items-center justify-between px-4 py-3 font-semibold text-white focus:outline-none"
+                    onClick={() => handleToggle('timings')}
+                  >
+                    <span className="flex items-center">
+                      <FiClock className="mr-2" /> Meal Timings
+                    </span>
+                    {showMobileSections.timings ? <FiChevronUp /> : <FiChevronDown />}
+                  </button>
+                  <AnimatePresence>
+                    {showMobileSections.timings && (
+                      <motion.ul
+                        className="px-5 pb-4 space-y-3"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {messRules.slice(0, 4).map((rule, idx) => (
+                          <li key={idx} className="flex items-start text-blue-100">
+                            <FiCheckCircle className="text-green-300 mt-1 mr-2 flex-shrink-0" />
+                            <span>{rule}</span>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </div>
+                {/* Rules & Regulations */}
+                <div className="bg-white/10 rounded-lg">
+                  <button
+                    className="w-full flex items-center justify-between px-4 py-3 font-semibold text-white focus:outline-none"
+                    onClick={() => handleToggle('rules')}
+                  >
+                    <span className="flex items-center">
+                      <FiAlertCircle className="mr-2" /> Rules & Regulations
+                    </span>
+                    {showMobileSections.rules ? <FiChevronUp /> : <FiChevronDown />}
+                  </button>
+                  <AnimatePresence>
+                    {showMobileSections.rules && (
+                      <motion.ul
+                        className="px-5 pb-4 space-y-3"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {messRules.slice(4).map((rule, idx) => (
+                          <li key={idx} className="flex items-start text-blue-100">
+                            <FiCheckCircle className="text-green-300 mt-1 mr-2 flex-shrink-0" />
+                            <span>{rule}</span>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </div>
+                {/* Guest Meal */}
+                <div className="bg-white/10 rounded-lg">
+                  <button
+                    className="w-full flex items-center justify-between px-4 py-3 font-semibold text-white focus:outline-none"
+                    onClick={() => handleToggle('guest')}
+                  >
+                    <span className="flex items-center">
+                      <FiDollarSign className="mr-2 text-yellow-300" /> Guest Meal
+                    </span>
+                    {showMobileSections.guest ? <FiChevronUp /> : <FiChevronDown />}
+                  </button>
+                  <AnimatePresence>
+                    {showMobileSections.guest && (
+                      <motion.div
+                        className="px-5 pb-4"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="text-lg font-bold text-yellow-300 mb-1">₹100 <span className="text-sm text-blue-100 font-normal">per meal</span></div>
+                        <p className="text-blue-100 mb-2 text-sm">
+                          Enjoy delicious meals with your guests at an affordable price. Perfect for when you have visitors!
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="inline-flex items-center px-3 py-1 bg-white/10 rounded-full text-xs">
+                            <FiClock className="mr-1" /> Available during all meal times
+                          </span>
+                          <span className="inline-flex items-center px-3 py-1 bg-white/10 rounded-full text-xs">
+                            <FiCheckCircle className="mr-1" /> Same quality as regular meals
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
         {/* Day Selector */}
-        <div className="relative mb-8" ref={daySelectorRef}>
+        <div className="relative mb-6 sm:mb-8" ref={daySelectorRef}>
           <div className="absolute left-0 top-0 bottom-0 flex items-center z-10">
             <motion.button
               onClick={() => scrollDays('left')}
@@ -160,8 +272,7 @@ const Home = () => {
               <FiChevronLeft size={20} />
             </motion.button>
           </div>
-          
-          <motion.div 
+          <motion.div
             className="flex gap-2 overflow-x-auto pb-4 px-12 scrollbar-hide"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -177,12 +288,11 @@ const Home = () => {
               const dayInitial = day.substring(0, 3);
               const date = new Date();
               date.setDate(date.getDate() + (index - date.getDay()));
-              
               return (
                 <motion.button
                   key={day}
                   onClick={() => setActiveDay(day)}
-                  className={`flex-shrink-0 px-4 py-3 rounded-xl font-medium transition-all flex flex-col items-center ${
+                  className={`flex-shrink-0 px-4 py-3 rounded-xl font-medium transition-all flex flex-col items-center relative ${
                     isActive
                       ? 'bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
                       : isToday
@@ -220,7 +330,6 @@ const Home = () => {
               );
             })}
           </motion.div>
-          
           <div className="absolute right-0 top-0 bottom-0 flex items-center z-10">
             <motion.button
               onClick={() => scrollDays('right')}
@@ -236,7 +345,7 @@ const Home = () => {
 
         {/* Menu Card */}
         <AnimatePresence mode="wait">
-          <motion.div 
+          <motion.div
             key={activeDay}
             className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100"
             initial={{ opacity: 0, y: 20, rotateX: -5 }}
@@ -244,36 +353,34 @@ const Home = () => {
             exit={{ opacity: 0, y: -20, rotateX: 5 }}
             transition={{ duration: 0.5, type: 'spring', damping: 15 }}
           >
-            <div className="p-6">
-              <motion.h2 
-                className="text-3xl font-bold text-gray-800 mb-6 font-serif"
+            <div className="p-4 sm:p-6">
+              <motion.h2
+                className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 font-serif"
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
                 {activeDay}'s Menu
               </motion.h2>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                 {mealTypes.map((mealType, index) => {
                   const menuItem = weeklyMenu[activeDay]?.[mealType] || 'Menu not available';
                   const isLongText = menuItem.length > 100;
-                  
                   return (
-                    <motion.div 
+                    <motion.div
                       key={mealType}
-                      className={`relative group bg-white p-5 rounded-xl border-l-4 ${
+                      className={`relative group bg-white p-4 sm:p-5 rounded-xl border-l-4 ${
                         mealType === 'breakfast' ? 'border-orange-400' :
                         mealType === 'lunch' ? 'border-green-400' :
                         mealType === 'snacks' ? 'border-yellow-400' : 'border-blue-400'
                       } shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden`}
                       initial={{ y: 20, opacity: 0, scale: 0.98 }}
                       animate={{ y: 0, opacity: 1, scale: 1 }}
-                      whileHover={{ 
+                      whileHover={{
                         y: -3,
                         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
                       }}
-                      transition={{ 
+                      transition={{
                         delay: 0.1 * index,
                         duration: 0.4,
                         type: 'spring',
@@ -289,7 +396,7 @@ const Home = () => {
                           {getMealIcon(mealType)}
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-800 capitalize mb-2">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-800 capitalize mb-1 sm:mb-2">
                             {mealType}
                           </h3>
                           <p className={`text-gray-600 leading-relaxed ${
@@ -299,13 +406,11 @@ const Home = () => {
                           </p>
                         </div>
                       </div>
-                      
                       {isLongText && (
                         <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
                       )}
-                      
                       {isLongText && (
-                        <button 
+                        <button
                           className="absolute bottom-2 right-2 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white/80 px-2 py-1 rounded-full border border-blue-100"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -325,9 +430,9 @@ const Home = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Mess Rules Section */}
-        <motion.div 
-          className="mt-12 px-4 sm:px-6"
+        {/* Desktop: Mess Rules Section */}
+        <motion.div
+          className="hidden sm:block mt-12 px-4 sm:px-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.5 }}
@@ -345,10 +450,9 @@ const Home = () => {
             </h2>
             <div className="h-1 w-20 bg-blue-600 rounded-full"></div>
           </motion.div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Meal Timings Card */}
-            <motion.div 
+            <motion.div
               className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -364,8 +468,8 @@ const Home = () => {
               </div>
               <ul className="space-y-3">
                 {messRules.slice(0, 4).map((rule, index) => (
-                  <motion.li 
-                    key={`timing-${index}`} 
+                  <motion.li
+                    key={`timing-${index}`}
                     className="flex items-start group"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -378,9 +482,8 @@ const Home = () => {
                 ))}
               </ul>
             </motion.div>
-            
             {/* Rules & Regulations Card */}
-            <motion.div 
+            <motion.div
               className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -396,8 +499,8 @@ const Home = () => {
               </div>
               <ul className="space-y-3">
                 {messRules.slice(4).map((rule, index) => (
-                  <motion.li 
-                    key={`rule-${index}`} 
+                  <motion.li
+                    key={`rule-${index}`}
                     className="flex items-start group"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -411,9 +514,8 @@ const Home = () => {
               </ul>
             </motion.div>
           </div>
-          
           {/* Guest Meal Card - Full Width */}
-          <motion.div 
+          <motion.div
             className="mt-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 shadow-lg text-white overflow-hidden relative"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -423,7 +525,6 @@ const Home = () => {
           >
             <div className="absolute -right-4 -top-4 w-32 h-32 bg-white/10 rounded-full"></div>
             <div className="absolute -right-10 top-1/2 w-24 h-24 bg-white/5 rounded-full"></div>
-            
             <div className="relative z-10">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
@@ -435,7 +536,7 @@ const Home = () => {
                     Enjoy delicious meals with your guests at an affordable price. Perfect for when you have visitors!
                   </p>
                 </div>
-                <motion.div 
+                <motion.div
                   className="mt-4 md:mt-0 bg-white/10 backdrop-blur-sm px-6 py-4 rounded-lg border border-white/20 flex-shrink-0"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
@@ -446,8 +547,7 @@ const Home = () => {
                   </div>
                 </motion.div>
               </div>
-              
-              <motion.div 
+              <motion.div
                 className="mt-6 pt-4 border-t border-white/10"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -469,7 +569,7 @@ const Home = () => {
       </main>
 
       {/* Compact Footer */}
-      <motion.footer 
+      <motion.footer
         className="bg-gray-800 text-white py-4 px-4 border-t border-gray-700 mt-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -481,19 +581,18 @@ const Home = () => {
               &copy; {new Date().getFullYear()} Poornima Mess
             </p>
             <div className="flex items-center space-x-6">
-              <a 
-                href="https://www.linkedin.com/in/kshitij-jain-422025342/" 
-                target="_blank" 
+              <a
+                href="https://www.linkedin.com/in/kshitij-jain-422025342/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center"
               >
                 <FiLinkedin className="inline mr-1.5 text-lg" /> LinkedIn
               </a>
-              <a 
-                href="mailto:negokshitij@gmail.com?subject=Regarding%20Poornima%20Mess&body=Hello%20Kshitij,%0D%0A%0D%0A" 
+              <a
+                href="mailto:negokshitij@gmail.com?subject=Regarding%20Poornima%20Mess&body=Hello%20Kshitij,%0D%0A%0D%0A"
                 className="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
                 onClick={(e) => {
-                  // Fallback in case the default mailto doesn't work
                   if (!window.location.href.startsWith('mailto:')) {
                     e.preventDefault();
                     window.open('https://mail.google.com/mail/?view=cm&fs=1&to=negokshitij@gmail.com&su=Regarding%20Poornima%20Mess&body=Hello%20Kshitij,', '_blank');
