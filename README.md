@@ -1,12 +1,23 @@
-# React + Vite
+# TummyTable (Poornima Mess App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web app for Poornima College students to view the weekly mess menu, meal timings, rules, and more. Built with React, Firebase, TailwindCSS, and Vite.
 
-Currently, two official plugins are available:
+**🌐 [Live Demo](https://poornima-mess.vercel.app/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- 📅 View daily and weekly mess menus
+- ⏰ Check meal timings and mess rules
+- 🥗 Special and guest meal info
+- 🔒 Secure login with Google or email magic link
+- ✨ Responsive, animated UI
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+- `src/pages/` — Main pages (Home, Landing, Login)
+- `src/data/messData.js` — Mess menu, rules, and info
+- `src/firebase/` — Firebase authentication logic
+
+---
+
+Made with ❤️ for Poornima Campus Students.
