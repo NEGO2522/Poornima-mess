@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
-import { 
-  FiMail, 
-  FiArrowRight, 
-  FiAlertCircle, 
-  FiCoffee, 
-  FiClock, 
-  FiSun,
+import {
+  FiMail,
+  FiArrowRight,
+  FiAlertCircle,
   FiCheck,
-  FiSend
+  FiClock,      
+  FiSun,        
+  FiCoffee      
 } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
-import { 
-  auth, 
-  signInWithGoogle, 
-  sendSignInLink, 
-  isSignInLinkUrl, 
+import {
+  auth,
+  signInWithGoogle,
+  sendSignInLink,
+  isSignInLinkUrl,
   signInWithEmail,
   onAuthStateChanged
 } from '../firebase/firebase';
@@ -37,7 +36,6 @@ const features = [
   {
     icon: <FiCoffee className="w-6 h-6" />,
     title: 'Special Menus',
-    title: 'Special Menus',
     description: 'Discover special weekend and festival menus in advance.'
   }
 ];
@@ -52,31 +50,25 @@ const Login = () => {
   const [loginError, setLoginError] = useState('');
   const [currentFeature, setCurrentFeature] = useState(0);
   const navigate = useNavigate();
-  
+
   // Check for email link on component mount
   useEffect(() => {
     const checkEmailLink = async () => {
       if (isSignInLinkUrl()) {
         setIsSubmitting(true);
         const emailForSignIn = window.localStorage.getItem('emailForSignIn');
-        
         try {
           const { success, user, error } = await signInWithEmail(emailForSignIn);
-          
           if (success) {
-            // Set auth token in localStorage
             const token = await user.getIdToken();
             localStorage.setItem('authToken', token);
-            
             toast.success('Successfully signed in!');
-            // Force a page reload to ensure auth state is properly updated
             window.location.href = '/home';
           } else {
             setLoginError(error?.message || 'Failed to sign in with email link');
             toast.error('Failed to sign in with email link');
           }
         } catch (error) {
-          console.error('Error signing in with email link:', error);
           setLoginError(error.message || 'Failed to sign in with email link');
           toast.error('Failed to sign in with email link');
         } finally {
@@ -84,7 +76,6 @@ const Login = () => {
         }
       }
     };
-    
     checkEmailLink();
   }, [navigate]);
 
@@ -94,11 +85,10 @@ const Login = () => {
       setCurrentUser(user);
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
-  // Auto-rotate features
+  // Auto-rotate features (desktop only)
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFeature((prev) => (prev + 1) % features.length);
@@ -109,31 +99,21 @@ const Login = () => {
   // Handle email link login
   const handleSendSignInLink = async (e) => {
     e.preventDefault();
-    
-    // Reset errors
     setLoginError('');
-    
-    // Validate email
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setLoginError('Please enter a valid email address');
       return;
     }
-    
     try {
       setIsSubmitting(true);
-      
-      // Send sign in link to email
       const { success, error } = await sendSignInLink(email);
-      
       if (success) {
         setIsEmailSent(true);
         toast.success('Login link sent to your email!');
       } else {
         throw error;
       }
-      
     } catch (error) {
-      console.error('Error sending sign in link:', error);
       const errorMessage = error?.message || 'Failed to send login link. Please try again.';
       setLoginError(errorMessage);
       toast.error(errorMessage);
@@ -147,7 +127,6 @@ const Login = () => {
     try {
       setIsSubmitting(true);
       const { success, error } = await signInWithGoogle();
-      
       if (success) {
         toast.success('Successfully logged in with Google!');
         navigate('/home');
@@ -155,7 +134,6 @@ const Login = () => {
         throw error;
       }
     } catch (error) {
-      console.error('Google sign in error:', error);
       const errorMessage = error.message || 'Failed to sign in with Google';
       setLoginError(errorMessage);
       toast.error(errorMessage);
@@ -166,11 +144,7 @@ const Login = () => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    
-    // Clear login error when typing
-    if (loginError) {
-      setLoginError('');
-    }
+    if (loginError) setLoginError('');
   };
 
   // Show loading spinner while checking auth state
@@ -181,7 +155,7 @@ const Login = () => {
       </div>
     );
   }
-  
+
   // Redirect if user is already logged in
   if (currentUser) {
     return <Navigate to="/home" replace />;
@@ -189,13 +163,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gradient-to-br from-blue-50 to-indigo-50">
-      {/* Left side - Feature showcase */}
-      <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+      {/* Left side - Feature showcase (hide on mobile) */}
+      <div className="hidden lg:flex w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex-col justify-center">
         <div className="max-w-md mx-auto w-full">
           <Link to="/" className="text-2xl font-bold text-blue-600 mb-8 inline-block">
             Mess App
           </Link>
-          
           <div className="mt-12">
             <AnimatePresence mode="wait">
               <motion.div
@@ -217,7 +190,6 @@ const Login = () => {
                 </p>
               </motion.div>
             </AnimatePresence>
-            
             <div className="flex space-x-2 mt-8">
               {features.map((_, index) => (
                 <button
@@ -234,16 +206,16 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right side - Login form */}
-      <div className="w-full lg:w-1/2 bg-white p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-        <div className="max-w-md w-full mx-auto">
+      {/* Right side - Login form (mobile: only form, no features) */}
+      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center items-center">
+        <div className="w-full max-w-sm mx-auto p-4 sm:p-8 bg-white">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
               {isEmailSent ? 'Check your email' : 'Welcome back'}
             </h1>
-            <p className="text-gray-600">
-              {isEmailSent 
-                ? `We've sent a login link to ${email}` 
+            <p className="text-gray-600 text-sm">
+              {isEmailSent
+                ? `We've sent a login link to ${email}`
                 : 'Sign in with your email or Google'}
             </p>
           </div>
@@ -252,93 +224,87 @@ const Login = () => {
           <button
             onClick={handleGoogleSignIn}
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-6 transition-colors"
+            className="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-5 transition-colors"
           >
             <FcGoogle className="w-5 h-5 mr-2" />
             Continue with Google
           </button>
 
-          <div className="relative my-6">
+          <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
+              <div className="w-full border-t border-gray-200"></div>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            <div className="relative flex justify-center text-xs">
+              <span className="px-2 bg-white text-gray-400">Or</span>
             </div>
           </div>
 
           {loginError && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start"
+              className="mb-5 p-3 bg-red-50 border border-red-200 rounded flex items-start"
             >
-              <FiAlertCircle className="text-red-500 mt-0.5 mr-3 flex-shrink-0" />
-              <p className="text-red-600 text-sm">{loginError}</p>
+              <FiAlertCircle className="text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+              <p className="text-red-600 text-xs">{loginError}</p>
             </motion.div>
           )}
 
           {!isEmailSent ? (
-            <>
-              <form onSubmit={handleSendSignInLink} className="space-y-6">
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email address
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FiMail className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      value={email}
-                      onChange={handleEmailChange}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="you@example.com"
-                      disabled={isSubmitting}
-                    />
+            <form onSubmit={handleSendSignInLink} className="space-y-5">
+              <div>
+                <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1">
+                  Email address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiMail className="h-4 w-4 text-gray-400" />
                   </div>
-                  {loginError && (
-                    <p className="mt-1 text-sm text-red-600">{loginError}</p>
-                  )}
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    className="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    placeholder="you@example.com"
+                    disabled={isSubmitting}
+                  />
                 </div>
-
-                <div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || !email}
-                    className={`w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ${
-                      isSubmitting || !email ? 'opacity-75 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Sending link...
-                      </>
-                    ) : (
-                      <>
-                        Send login link
-                        <FiArrowRight className="ml-2 h-4 w-4" />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            </>
-          ) : (
-            <div className="text-center p-6 border-2 border-dashed border-green-200 rounded-lg bg-green-50">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                <FiCheck className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Check your email</h3>
-              <p className="text-sm text-gray-500 mb-4">
+              <div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !email}
+                  className={`w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                    isSubmitting || !email ? 'opacity-75 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      Send login link
+                      <FiArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="text-center p-5 border-2 border-dashed border-green-200 rounded-lg bg-green-50">
+              <div className="mx-auto flex items-center justify-center h-10 w-10 rounded-full bg-green-100 mb-3">
+                <FiCheck className="h-5 w-5 text-green-600" />
+              </div>
+              <h3 className="text-base font-medium text-gray-900 mb-1">Check your email</h3>
+              <p className="text-xs text-gray-500 mb-2">
                 We've sent a magic link to <span className="font-medium">{email}</span>.
                 Click the link to sign in.
               </p>
@@ -350,15 +316,16 @@ const Login = () => {
                   setIsEmailSent(false);
                   setLoginError('');
                 }}
-                className="mt-4 text-sm text-blue-600 hover:text-blue-500 font-medium"
+                className="mt-3 text-xs text-blue-600 hover:text-blue-500 font-medium"
               >
                 Back to sign in
               </button>
             </div>
           )}
+
           {!isEmailSent && (
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+            <div className="mt-5 text-center">
+              <p className="text-xs text-gray-600">
                 Don't have an account?{' '}
                 <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
                   Sign up
@@ -367,12 +334,10 @@ const Login = () => {
             </div>
           )}
 
-          <div className="mt-8 border-t border-gray-200 pt-6">
-            <div className="text-center">
-              <p className="text-xs text-gray-500">
-                By continuing, you agree to our Terms of Service and Privacy Policy
-              </p>
-            </div>
+          <div className="mt-6 text-center">
+            <p className="text-[10px] text-gray-400">
+              By continuing, you agree to our Terms of Service and Privacy Policy
+            </p>
           </div>
         </div>
       </div>
