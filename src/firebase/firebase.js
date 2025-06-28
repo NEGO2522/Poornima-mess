@@ -1,26 +1,22 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
   signInWithEmailLink,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signOut as firebaseSignOut,
-  signInWithRedirect, 
-  getRedirectResult,
-  onAuthStateChanged 
+  onAuthStateChanged
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDgffBgHNXRAw9NoxrHW5NRBVlbPuI0c8w",
   authDomain: "mess-3c72e.firebaseapp.com",
   projectId: "mess-3c72e",
-  storageBucket: "mess-3c72e.firebasestorage.app",
+  storageBucket: "mess-3c72e.appspot.com",
   messagingSenderId: "934962786207",
   appId: "1:934962786207:web:2ae4415d96511de67657aa",
   measurementId: "G-GFBBRJ9G4W"
@@ -30,7 +26,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
@@ -40,22 +35,6 @@ const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-    
-    // Check if user exists in Firestore
-    const userDoc = await getDoc(doc(db, 'users', user.uid));
-    
-    // If user doesn't exist, create a new document
-    if (!userDoc.exists()) {
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
-    }
-    
     return { success: true, user };
   } catch (error) {
     console.error("Error signing in with Google:", error);
@@ -66,14 +45,12 @@ const signInWithGoogle = async () => {
 // Email link authentication
 const sendSignInLink = async (email) => {
   const actionCodeSettings = {
-    // URL you want to redirect back to after email verification
     url: `${window.location.origin}/verify-email`,
     handleCodeInApp: true,
   };
 
   try {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    // Save the email locally to use after clicking the link
     window.localStorage.setItem('emailForSignIn', email);
     return { success: true };
   } catch (error) {
@@ -91,19 +68,12 @@ const isSignInLinkUrl = () => {
 const signInWithEmail = async (email) => {
   try {
     let emailForSignIn = email || window.localStorage.getItem('emailForSignIn');
-    
     if (!emailForSignIn) {
       emailForSignIn = window.prompt('Please provide your email for confirmation');
     }
-    
     const result = await signInWithEmailLink(auth, emailForSignIn, window.location.href);
-    
-    // Clear the email from storage
     window.localStorage.removeItem('emailForSignIn');
-    
-    // Update the user's email verification status
     await result.user.reload();
-    
     return { success: true, user: result.user };
   } catch (error) {
     console.error('Error signing in with email link:', error);
@@ -122,14 +92,12 @@ const signOut = async () => {
   }
 };
 
-export { 
-  app, 
-  analytics, 
-  auth, 
-  db, 
-  googleProvider, 
+export {
+  app,
+  analytics,
+  auth,
+  googleProvider,
   signInWithGoogle,
-  GoogleAuthProvider,
   sendSignInLink,
   isSignInLinkUrl,
   signInWithEmail,

@@ -331,46 +331,6 @@ const Login = () => {
                   </button>
                 </div>
               </form>
-
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                </div>
-              </div>
-
-              <button
-                onClick={async () => {
-                  try {
-                    setIsSubmitting(true);
-                    const { success, user, error } = await signInWithGoogle();
-                    if (success) {
-                      // Set auth token in localStorage
-                      const token = await user.getIdToken();
-                      localStorage.setItem('authToken', token);
-                      
-                      toast.success('Successfully logged in with Google!');
-                      // Force a page reload to ensure auth state is properly updated
-                      window.location.href = '/home';
-                    } else {
-                      throw error;
-                    }
-                  } catch (error) {
-                    console.error('Google sign in error:', error);
-                    setLoginError(error?.message || 'Failed to sign in with Google');
-                    toast.error('Failed to sign in with Google');
-                  } finally {
-                    setIsSubmitting(false);
-                  }
-                }}
-                disabled={isSubmitting}
-                className="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-6 transition-colors"
-              >
-                <FcGoogle className="w-5 h-5 mr-2" />
-                Continue with Google
-              </button>
             </>
           ) : (
             <div className="text-center p-6 border-2 border-dashed border-green-200 rounded-lg bg-green-50">
@@ -396,7 +356,6 @@ const Login = () => {
               </button>
             </div>
           )}
-
           {!isEmailSent && (
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
