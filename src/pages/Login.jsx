@@ -6,9 +6,9 @@ import {
   FiArrowRight,
   FiAlertCircle,
   FiCheck,
-  FiClock,      
-  FiSun,        
-  FiCoffee      
+  FiClock,
+  FiSun,
+  FiCoffee
 } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import {
@@ -207,10 +207,47 @@ const Login = () => {
       </div>
 
       {/* Right side - Login form (mobile: only form, no features) */}
-      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center items-center">
-        <div className="w-full max-w-sm mx-auto p-4 sm:p-8 bg-white">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-white via-blue-50 to-indigo-100 relative overflow-hidden">
+        {/* Decorative background shapes */}
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-blue-100 rounded-full opacity-40 blur-2xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-100 rounded-full opacity-30 blur-2xl pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-blue-200 rounded-full opacity-20 blur-2xl pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
+        {/* Extra design: animated gradient bar */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-2 bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-400 rounded-full blur-sm opacity-60 animate-pulse z-0"></div>
+        {/* Extra design: floating icons */}
+        <div className="hidden sm:block absolute right-8 top-24 z-0 animate-float-slow">
+          <FiCoffee className="text-indigo-200" size={32} />
+        </div>
+        <div className="hidden sm:block absolute left-8 bottom-24 z-0 animate-float">
+          <FiSun className="text-yellow-200" size={28} />
+        </div>
+        <div className="hidden sm:block absolute left-1/2 bottom-10 -translate-x-1/2 z-0 animate-float-slow">
+          <FiClock className="text-blue-200" size={28} />
+        </div>
+        {/* Login Card */}
+        <div
+          className="
+            w-full max-w-xs sm:max-w-sm mx-auto p-4 sm:p-6 bg-white/90 backdrop-blur-md rounded-xl
+            flex flex-col justify-center items-center
+            min-h-[70vh]
+            my-auto
+            border border-blue-100
+            lg:min-h-[80vh]
+            lg:rounded-xl
+            relative z-10
+          "
+        >
+          {/* Logo or App Icon */}
+          <div className="flex items-center justify-center mb-2">
+            <img
+              src="https://img.icons8.com/color/48/meal.png"
+              alt="Mess App Logo"
+              className="h-12 w-12 rounded-full shadow"
+            />
+          </div>
+          <div className="text-center mb-4">
+            <h1 className="text-2xl font-extrabold text-gray-900 mb-1 drop-shadow">
               {isEmailSent ? 'Check your email' : 'Welcome back'}
             </h1>
             <p className="text-gray-600 text-sm">
@@ -219,18 +256,17 @@ const Login = () => {
                 : 'Sign in with your email or Google'}
             </p>
           </div>
-
           {/* Google Sign In Button */}
           <button
             onClick={handleGoogleSignIn}
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-5 transition-colors"
+            className="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3 transition-colors"
           >
             <FcGoogle className="w-5 h-5 mr-2" />
             Continue with Google
           </button>
 
-          <div className="relative my-5">
+          <div className="relative my-3">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200"></div>
             </div>
@@ -251,7 +287,7 @@ const Login = () => {
           )}
 
           {!isEmailSent ? (
-            <form onSubmit={handleSendSignInLink} className="space-y-5">
+            <form onSubmit={handleSendSignInLink} className="space-y-5 w-full">
               <div>
                 <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1">
                   Email address
@@ -299,7 +335,7 @@ const Login = () => {
               </div>
             </form>
           ) : (
-            <div className="text-center p-5 border-2 border-dashed border-green-200 rounded-lg bg-green-50">
+            <div className="text-center p-5 border-2 border-dashed border-green-200 rounded-lg bg-green-50 w-full">
               <div className="mx-auto flex items-center justify-center h-10 w-10 rounded-full bg-green-100 mb-3">
                 <FiCheck className="h-5 w-5 text-green-600" />
               </div>
@@ -324,7 +360,7 @@ const Login = () => {
           )}
 
           {!isEmailSent && (
-            <div className="mt-5 text-center">
+            <div className="mt-5 text-center w-full">
               <p className="text-xs text-gray-600">
                 Don't have an account?{' '}
                 <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
@@ -334,7 +370,7 @@ const Login = () => {
             </div>
           )}
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center w-full">
             <p className="text-[10px] text-gray-400">
               By continuing, you agree to our Terms of Service and Privacy Policy
             </p>
