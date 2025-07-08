@@ -1,53 +1,53 @@
 export const weeklyMenu = {
   'Monday': {
-    breakfast: 'Poha, Bread Butter, Tea, Banana',
-    lunch: 'Dal, Rice, Roti, Mix Veg, Curd, Salad',
+    breakfast: ' Bread Butter, Tea, Idli-Sambhar ,Milk',
+    lunch: 'Dal, Rice, Roti, Channa-Chola, Salad, Kadu-Sabji, Raita',
     snacks: 'Samosa, Tea',
-    dinner: 'Rajma, Rice, Roti, Salad, Sweet, Buttermilk'
+    dinner: 'Aloo-Sabji, Rice, Roti, Salad, Tinde-Sabji, Curd'
   },
   'Tuesday': {
-    breakfast: 'Aloo Paratha, Curd, Pickle, Tea',
-    lunch: 'Chole, Rice, Roti, Paneer, Raita, Salad',
+    breakfast: 'Bread Butter, Tea, Milk,',
+    lunch: 'Chole, Rice, Roti,  Raita, Salad',
     snacks: 'Bread Pakora, Coffee',
-    dinner: 'Dal Makhani, Rice, Roti, Salad, Ice Cream, Curd'
+    dinner: 'Dal Makhani, Rice, Roti, Salad,  Curd'
   },
   'Wednesday': {
-    breakfast: 'Idli, Sambar, Chutney, Coffee, Banana',
-    lunch: 'Kadhi, Rice, Roti, Aloo Jeera, Salad, Curd',
+    breakfast: 'Bread-Butter, Tea, Milk',
+    lunch: 'Kadhi, Rice, Roti, Aloo Jeera, Salad, Raita',
     snacks: 'Biscuits, Tea, Rusk',
     dinner: 'Dal Tadka, Rice, Roti, Mix Veg, Curd, Pickle'
   },
   'Thursday': {
-    breakfast: 'Chole Bhature, Pickle, Tea, Banana',
-    lunch: 'Rajma, Rice, Roti, Aloo Gobi, Salad, Curd',
+    breakfast: 'Bread-Butter, Tea, Milk',
+    lunch: 'Rajma, Rice, Roti, Aloo Gobi, Salad, Raita',
     snacks: 'Maggi, Coffee, Biscuits',
     dinner: 'Dal Fry, Rice, Roti, Paneer, Sweet, Buttermilk'
   },
   'Friday': {
-    breakfast: 'Upma, Chutney, Tea, Banana',
-    lunch: 'Chana Masala, Rice, Roti, Mix Veg, Curd, Salad',
+    breakfast: 'Bread-Butter, Tea, Milk',
+    lunch: 'Chana Masala, Rice, Roti, Mix Veg, Raita, Salad',
     snacks: 'Patties, Tea, Biscuits',
     dinner: 'Dal, Rice, Roti, Aloo Matar, Salad, Curd'
   },
   'Saturday': {
-    breakfast: 'Puri, Aloo Sabzi, Tea, Banana',
+    breakfast: 'Bread-Butter, Tea, Milk, Aloo-Paratha',
     lunch: 'Dal Makhani, Rice, Roti, Paneer, Raita, Salad',
     snacks: 'Bread Toast, Coffee, Biscuits',
     dinner: 'Dal, Rice, Roti, Mix Veg, Sweet, Buttermilk'
   },
   'Sunday': {
-    breakfast: 'Aloo Paratha, Curd, Pickle, Tea, Banana',
-    lunch: 'Special Thali (Dal, Rice, Roti, 2 Sabzi, Salad, Sweet, Curd, Papad, Pickle)',
+    breakfast: 'Bread-Butter, Tea, Milk, Poori-Sabji',
+    lunch: 'Special Thali (Dal, Rice, Roti, 2 Sabzi, Salad, Sweet, Raita, Papad, Pickle)',
     snacks: 'Poha, Tea, Biscuits',
-    dinner: 'Dal, Rice, Roti, Mix Veg, Curd, Salad, Sweet'
+    dinner: 'Dal, Rice, Roti, Panner, Salad, Sweet, Kheer'
   }
 };
 
 export const messRules = [
-  "Breakfast: 8:00 AM - 10:00 AM",
-  "Lunch: 12:30 PM - 2:30 PM",
-  "Snacks: 4:30 PM - 6:00 PM",
-  "Dinner: 8:00 PM - 10:00 PM",
+  "Breakfast: 7:00 AM - 8:00 AM",
+  "Lunch: 11:00 PM - 2:00 PM",
+  "Snacks: 5:00 PM - 6:00 PM",
+  "Dinner: 7:30 PM - 9:00 PM",
   "Meal timings are strictly followed. Late comers will not be entertained.",
   "Wastage of food is strictly prohibited.",
   "Maintain discipline and cleanliness in the mess premises.",
@@ -56,20 +56,5 @@ export const messRules = [
   "Guests are allowed with prior permission and additional charges."
 ];
 
-export const contactInfo = {
-  address: "Poornima College of Engineering, ISI-2, Sitapura, Jaipur, Rajasthan 302022",
-  phone: "+91 141 399 9100",
-  email: "mess@poornima.org",
-  warden: "Mr. Rajesh Kumar",
-  wardenPhone: "+91 98765 43210",
-  caretaker: "Mr. Ramesh Sharma",
-  caretakerPhone: "+91 98765 12345"
-};
 
-export const feeStructure = {
-  monthly: 3500,
-  quarterly: 10000,
-  yearly: 38000,
-  guestMeal: 100,
-  securityDeposit: 5000
-};
+
