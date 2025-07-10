@@ -21,7 +21,7 @@ export const weeklyMenu = {
     breakfast: 'Bread-Butter, Tea, Milk, Pyaaj-Pratha',
     lunch: 'Gatte, Rice, Roti, Kaddi, Salad, Raita',
     snacks: 'BaelPuri, Tea',
-    dinner: 'Dal Fry, Rice, Roti, Paneer, Sweet, Buttermilk'
+    dinner: 'Dal , Rice, Roti, Rajma, Aloo-Palak, Pickle, Curd'
   },
   'Friday': {
     breakfast: 'Bread-Butter, Tea, Milk',
