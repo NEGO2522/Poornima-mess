@@ -582,7 +582,7 @@ const Home = () => {
             </p>
             <div className="flex items-center space-x-6">
               <a
-                href="https://www.linkedin.com/in/kshitij-jain-422025342/"
+                href="https://www.linkedin.com/in/manish-kumar-4b013132a"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center"
@@ -590,12 +590,12 @@ const Home = () => {
                 <FiLinkedin className="inline mr-1.5 text-lg" /> LinkedIn
               </a>
               <a
-                href="mailto:negokshitij@gmail.com?subject=Regarding%20Poornima%20Mess&body=Hello%20Kshitij,%0D%0A%0D%0A"
+                href="mailto:manishop1air@gamil.com?subject=Regarding%20Poornima%20Mess&body=Hello%20Manish,%0D%0A%0D%0A"
                 className="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
                 onClick={(e) => {
                   if (!window.location.href.startsWith('mailto:')) {
                     e.preventDefault();
-                    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=negokshitij@gmail.com&su=Regarding%20Poornima%20Mess&body=Hello%20Kshitij,', '_blank');
+                    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=negokshitij@gmail.com&su=Regarding%20Poornima%20Mess&body=Hello%20Manish,', '_blank');
                   }
                 }}
               >
