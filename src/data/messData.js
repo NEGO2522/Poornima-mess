@@ -24,10 +24,10 @@ export const weeklyMenu = {
     dinner: 'Dal , Rice, Roti, Rajma, Aloo-Palak, Pickle, Curd'
   },
   'Friday': {
-    breakfast: 'Bread-Butter, Tea, Milk',
-    lunch: 'Chana Masala, Rice, Roti, Mix Veg, Raita, Salad',
-    snacks: 'Patties, Tea, Biscuits',
-    dinner: 'Dal, Rice, Roti, Aloo Matar, Salad, Curd'
+    breakfast: 'Bread-Butter, Tea, Milk-Rose, Poha',
+    lunch: 'Bhindi-Sabji, Rice, Roti, Gatte-Sabji, Raita, Salad',
+    snacks: 'Momos, Tea, Biscuits',
+    dinner: 'Dal, Rice, Roti, Kathal, Salad, Curd, Chole'
   },
   'Saturday': {
     breakfast: 'Bread-Butter, Tea, Milk, Aloo-Paratha',
