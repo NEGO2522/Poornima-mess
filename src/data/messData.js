@@ -31,14 +31,14 @@ export const weeklyMenu = {
   },
   'Saturday': {
     breakfast: 'Bread-Butter, Tea, Milk, Aloo-Paratha',
-    lunch: 'Dal Makhani, Rice, Roti, Paneer, Raita, Salad',
-    snacks: 'Bread Toast, Coffee, Biscuits',
-    dinner: 'Dal, Rice, Roti, Mix Veg, Sweet, Buttermilk'
+    lunch: 'Dal, Rice, Roti, chana-chole, Raita, Salad, Kaduu',
+    snacks: 'Chai, Upma',
+    dinner: 'Dal-Makhni, Rice, Roti, Patta-Gobi, aloo-Soyaben, Curd'
   },
   'Sunday': {
-    breakfast: 'Bread-Butter, Tea, Milk, Poori-Sabji',
+    breakfast: 'Bread-Butter, Tea, Milk, Besan-Chilla',
     lunch: 'Special Thali (Dal, Rice, Roti, 2 Sabzi, Salad, Sweet, Raita, Papad, Pickle)',
-    snacks: 'Poha, Tea, Biscuits',
+    snacks: 'Poha, Tea',
     dinner: 'Dal, Rice, Roti, Panner, Salad, Sweet, Kheer'
   }
 };
@@ -51,8 +51,6 @@ export const messRules = [
   "Meal timings are strictly followed. Late comers will not be entertained.",
   "Wastage of food is strictly prohibited.",
   "Maintain discipline and cleanliness in the mess premises.",
-  "Inform in advance for any leave or absence.",
-  "Monthly mess charges must be paid by the 5th of every month.",
   "Guests are allowed with prior permission and additional charges."
 ];
 
