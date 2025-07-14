@@ -39,7 +39,7 @@ export const weeklyMenu = {
     breakfast: 'Bread-Butter, Tea, Milk, Besan-Chilla',
     lunch: 'Special Thali (Dal, Rice, Roti, 2 Sabzi, Salad, Sweet, Raita, Papad, Pickle)',
     snacks: 'Poha, Tea',
-    dinner: 'Dal, Rice, Roti, Panner, Salad, Sweet, Kheer'
+    dinner: 'Dal, Bati, Churma, Salad, Rice, Pickle'
   }
 };
 
